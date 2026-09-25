@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Бриф на разработку сайта</title>
+<meta name="description" content="Пошаговый бриф на разработку сайта: расскажите о задаче, продукте и клиентах, это займёт 10–15 минут.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Уведомление о восстановленном черновике и другие тосты -->
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <!-- ЭКРАН 1 · ИНТРО -->
+  <section id="screen-intro" class="screen screen--intro">
+    <div class="intro-visual">
+      <div class="intro-photo-frame">
+        <img src="assets/photo.jpeg" alt="Марина" class="intro-photo">
+      </div>
+      <!-- TODO: подставить настоящее имя и роль -->
+      <p class="intro-caption">
+        <span class="intro-caption__name">Марина</span>
+        <span class="intro-caption__role">Дизайнер сайтов</span>
+      </p>
+    </div>
+    <div class="intro-content">
+      <h1 class="intro-title">Расскажите мне о&nbsp;вашем <span class="accent-word">бизнесе</span></h1>
+      <p class="intro-text">
+        Бриф состоит из 7 коротких этапов: бизнес-задача, продукт, клиенты, путь продажи,
+        доказательства, материалы и&nbsp;контакты. На каждом экране всего несколько вопросов,
+        отвечать можно в&nbsp;свободной форме. Обязательные вопросы отмечены звёздочкой,
+        остальные заполнять необязательно.
+      </p>
+      <button type="button" id="start-btn" class="btn btn--primary">Начать бриф</button>
+    </div>
+  </section>
+
+  <!-- ЭКРАН 2 · ФОРМА (все этапы 01–07) -->
+  <section id="screen-form" class="screen screen--form" hidden>
+
+    <header class="form-header">
+      <div class="progress-track" aria-hidden="true">
+        <div id="progress-fill" class="progress-track__fill"></div>
+      </div>
+      <span id="stage-counter" class="stage-counter">Этап 01 / 07</span>
+    </header>
+
+    <div class="form-body">
+
+      <aside class="form-aside" id="form-aside">
+        <span class="form-aside__number" id="aside-number">01</span>
+        <h2 class="form-aside__title" id="aside-title"></h2>
+        <p class="form-aside__description" id="aside-description"></p>
+      </aside>
+
+      <div class="form-main">
+        <form id="question-form" novalidate>
+          <div id="fields-container" class="fields-container"></div>
+        </form>
+
+        <div class="form-nav">
+          <button type="button" id="back-btn" class="btn btn--ghost">Назад</button>
+          <button type="button" id="next-btn" class="btn btn--primary">Далее</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ЭКРАН 3 · СПАСИБО -->
+  <section id="screen-thanks" class="screen screen--thanks" hidden>
+    <div class="thanks-photo-wrap">
+      <img src="assets/photo.jpeg" alt="Марина" class="thanks-photo">
+    </div>
+    <div class="thanks-content">
+      <h1 class="thanks-title">Спасибо!</h1>
+      <p class="thanks-text">Я получила ваш бриф и скоро с вами свяжусь.</p>
+      <p class="thanks-text thanks-text--muted">
+        Обычно я&nbsp;отвечаю в&nbsp;течение 2–3 рабочих дней: свяжусь по указанному
+        контакту и&nbsp;предложу удобное время для звонка или переписки.
+      </p>
+      <div class="thanks-actions">
+        <a id="telegram-link" class="btn btn--primary" href="#" target="_blank" rel="noopener noreferrer">Написать в&nbsp;Telegram</a>
+        <button id="download-btn" class="btn btn--ghost" type="button">Скачать копию ответов</button>
+      </div>
+      <button id="restart-btn" class="btn-link" type="button">Заполнить бриф ещё раз, например, для другого сайта</button>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <p class="site-footer__note">
+      <!-- TODO: заменить на реальные ссылки и реквизиты — см. README.md -->
+      Нажимая «Отправить бриф», вы соглашаетесь с&nbsp;<a href="privacy.html" target="_blank" rel="noopener noreferrer">политикой конфиденциальности</a>
+      и&nbsp;<a href="offer.html" target="_blank" rel="noopener noreferrer">публичной офертой</a>.
+    </p>
+  </footer>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
