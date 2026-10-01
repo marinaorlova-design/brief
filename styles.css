@@ -1,19 +1,22 @@
 /* ==========================================================
    ПЕРЕМЕННЫЕ И БАЗОВЫЕ НАСТРОЙКИ
+   Палитра и шрифты — по дев-коду из Figma (см. комментарии).
    ========================================================== */
 :root {
-  --color-bg: #F5EDE1;
-  --color-surface: #FFFFFF;
-  --color-text: #241713;
-  --color-text-muted: #6B5E54;
-  --color-border: #E3D6C4;
-  --color-accent: #6E1423;
-  --color-accent-soft: #3C5A73;
-  --color-accent-bg: #F1E2E0;
+  --color-bg: #F6F4FC;        /* фон страницы */
+  --color-surface: #FEFDFF;   /* фон полей ввода / карточек */
+  --color-text: #1A1B24;      /* основной текст + графичные бордеры */
+  --color-text-muted: #6E7188;/* второстепенный текст (описание этапа) */
+  --color-track: #E1E0E5;     /* фон незаполненной части прогресс-бара */
+  --color-accent: #5897E7;    /* синий акцент: кнопки, прогресс, фокус */
+  --color-accent-contrast: #F6F4FC; /* текст на синей кнопке */
+  --font-body: 'Roboto', sans-serif;
+  --font-display: 'Handjet', sans-serif; /* пиксельный дисплей-шрифт */
+  --radius-btn: 14px;
   --radius-s: 8px;
-  --radius-m: 14px;
-  --radius-l: 22px;
-  --shadow-card: 0 12px 32px rgba(36, 23, 19, 0.08);
+  --radius-m: 10px;
+  --radius-l: 16px;
+  --shadow-card: 0 12px 32px rgba(26, 27, 36, 0.10);
   --transition: 0.35s cubic-bezier(.4, 0, .2, 1);
   --gutter: 20px;
 }
@@ -27,7 +30,7 @@ body {
   min-height: 100vh;
   background: var(--color-bg);
   color: var(--color-text);
-  font-family: 'Manrope', sans-serif;
+  font-family: var(--font-body);
   font-weight: 400;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
@@ -35,31 +38,18 @@ body {
 
 h1, h2, h3, p { margin: 0; }
 
-.accent-word {
-  font-weight: 800;
-  color: var(--color-accent);
-}
-
-.eyebrow {
-  margin: 0 0 12px;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--color-accent-soft);
-}
-
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   padding: 15px 28px;
-  border-radius: 999px;
+  border-radius: var(--radius-btn);
   border: none;
-  font-family: inherit;
+  font-family: var(--font-body);
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 600;
+  letter-spacing: -0.03em;
   cursor: pointer;
   text-decoration: none;
   transition: transform var(--transition), background var(--transition), box-shadow var(--transition);
@@ -68,20 +58,20 @@ h1, h2, h3, p { margin: 0; }
 .btn:active { transform: scale(0.97); }
 .btn--primary {
   background: var(--color-accent);
-  color: #FFF8F0;
+  color: var(--color-accent-contrast);
 }
-.btn--primary:hover { box-shadow: 0 8px 24px rgba(110, 20, 35, 0.35); }
+.btn--primary:hover { box-shadow: 0 8px 24px rgba(88, 151, 231, 0.4); }
 .btn--primary:disabled {
   opacity: 0.45;
   cursor: not-allowed;
   box-shadow: none;
 }
 .btn--ghost {
-  background: transparent;
+  background: var(--color-surface);
   color: var(--color-text);
-  border: 1.5px solid var(--color-border);
+  border: 1.5px solid var(--color-text);
 }
-.btn--ghost:hover { border-color: var(--color-accent-soft); color: var(--color-accent-soft); }
+.btn--ghost:hover { border-color: var(--color-accent); color: var(--color-accent); }
 
 /* ==========================================================
    ТОСТ (уведомления)
@@ -92,7 +82,7 @@ h1, h2, h3, p { margin: 0; }
   bottom: 24px;
   transform: translateX(-50%) translateY(20px);
   background: var(--color-text);
-  color: #FFF8F0;
+  color: var(--color-accent-contrast);
   padding: 14px 22px;
   border-radius: var(--radius-m);
   font-size: 14px;
@@ -125,60 +115,57 @@ section.screen[hidden] {
 .screen--intro {
   display: flex;
   flex-direction: column;
-  padding: 48px var(--gutter) 40px;
-  gap: 32px;
-}
-.intro-visual {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 14px;
-}
-.intro-photo-frame {
-  position: relative;
-  width: 200px;
-  aspect-ratio: 3 / 4;
-  border-radius: var(--radius-l);
-  overflow: hidden;
-  box-shadow: var(--shadow-card);
-  border: 4px solid var(--color-accent);
-  flex-shrink: 0;
 }
 .intro-photo {
+  width: calc(100% - var(--gutter) * 2); /* на мобильном фото НЕ на всю ширину — с теми же полями, что и текст */
+  margin: 0 var(--gutter);
+  margin-bottom: 40px; /* отступ перед подвалом, т.к. фото теперь последнее */
+  aspect-ratio: 675 / 700; /* пропорции исходника — не искажаем ни на одном брейкпоинте */
+  overflow: hidden;
+  flex-shrink: 0;
+  order: 3; /* на мобильном фото идёт ПОСЛЕ кнопки — см. референс */
+}
+.intro-photo img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: top center;
+  display: block;
 }
-.intro-caption {
+/* На мобильном «растворяем» обёртку: intro-copy (картинка+текст+кнопка)
+   становится прямым ребёнком .screen--intro и может переставляться через
+   order независимо от фото, которое должно встать ПОСЛЕ неё. */
+.intro-content {
+  display: contents;
+}
+.intro-copy {
+  order: 1;
+  width: 100%;
+  padding: 40px var(--gutter) 0;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  align-items: flex-start; /* картинка, текст и кнопка — одной ширины, прижаты слева */
 }
-.intro-caption__name {
-  font-size: 15px;
-  font-weight: 800;
-  color: var(--color-text);
-}
-.intro-caption__role {
-  font-size: 13px;
-  color: var(--color-text-muted);
-}
-.intro-content { max-width: 640px; }
-.intro-title {
-  font-size: clamp(32px, 6vw, 56px);
-  font-weight: 800;
-  line-height: 1.08;
-  letter-spacing: -0.02em;
-  margin-bottom: 24px;
+.intro-headline-image {
+  display: block;
+  width: 100%; /* на мобильном — ровно ширина фото (та же обвязка гаттером) */
+  height: auto;
 }
 .intro-text {
-  font-size: 17px;
-  line-height: 1.6;
-  margin-bottom: 16px;
-  max-width: 56ch;
+  width: 100%; /* та же ширина, что у картинки, — перенос строк совпадает */
+  font-size: clamp(14px, 3.5vw, 16px);
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.03em;
+  margin-top: 0; /* на мобильном — встык под картинкой, без зазора */
+  margin-bottom: 24px;
 }
-#start-btn { margin-top: 8px; }
+#start-btn {
+  align-self: flex-start; /* у левого края картинки/текста — теперь кнопка внутри .intro-copy */
+  margin: 0 0 24px;
+  font-size: 18px;
+  padding: 17px 32px;
+}
 
 /* ---------- ФОРМА: шапка с прогрессом ---------- */
 .screen--form {
@@ -195,13 +182,12 @@ section.screen[hidden] {
   display: flex;
   align-items: center;
   gap: 16px;
-  border-bottom: 1px solid var(--color-border);
 }
 .progress-track {
   flex: 1;
-  height: 4px;
+  height: 5px;
   border-radius: 999px;
-  background: var(--color-border);
+  background: var(--color-track);
   overflow: hidden;
 }
 .progress-track__fill {
@@ -212,11 +198,11 @@ section.screen[hidden] {
   transition: width var(--transition);
 }
 .stage-counter {
-  font-size: 12px;
+  font-family: var(--font-display);
+  font-size: 20px;
   font-weight: 700;
-  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--color-text-muted);
+  color: var(--color-text);
   white-space: nowrap;
 }
 
@@ -229,22 +215,26 @@ section.screen[hidden] {
 }
 .form-aside__number {
   display: block;
-  font-size: 14px;
-  font-weight: 800;
-  color: var(--color-accent);
-  letter-spacing: 0.08em;
-  margin-bottom: 8px;
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 4px;
 }
 .form-aside__title {
+  font-family: var(--font-body);
   font-size: 26px;
-  font-weight: 800;
-  letter-spacing: -0.01em;
+  font-weight: 600;
+  letter-spacing: -0.03em;
   margin-bottom: 10px;
 }
 .form-aside__description {
-  font-size: 15px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 400;
   color: var(--color-text-muted);
-  line-height: 1.55;
+  line-height: 1.4;
+  letter-spacing: -0.03em;
   max-width: 46ch;
 }
 .form-main { flex: 1; }
@@ -263,8 +253,10 @@ section.screen[hidden] {
   gap: 8px;
 }
 .field__label {
+  font-family: var(--font-body);
   font-size: 18px;
-  font-weight: 700;
+  font-weight: 600;
+  letter-spacing: -0.03em;
   line-height: 1.4;
 }
 .field__required-mark { color: var(--color-accent); }
@@ -274,7 +266,7 @@ section.screen[hidden] {
   padding: 3px 10px;
   border-radius: 999px;
   background: var(--color-accent);
-  color: #FFF8F0;
+  color: var(--color-accent-contrast);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -296,7 +288,7 @@ section.screen[hidden] {
 .field.is-invalid input[type="text"],
 .field.is-invalid .file-drop {
   border-color: var(--color-accent) !important;
-  box-shadow: 0 0 0 3px rgba(110, 20, 35, 0.12);
+  box-shadow: 0 0 0 3px rgba(88, 151, 231, 0.15);
 }
 
 textarea, input[type="text"] {
@@ -305,7 +297,7 @@ textarea, input[type="text"] {
   font-size: 16px;
   color: var(--color-text);
   background: var(--color-surface);
-  border: 1.5px solid var(--color-border);
+  border: 1.5px solid var(--color-text);
   border-radius: var(--radius-m);
   padding: 16px 18px;
   transition: border-color var(--transition), box-shadow var(--transition);
@@ -318,8 +310,8 @@ textarea {
 }
 textarea:focus, input[type="text"]:focus {
   outline: none;
-  border-color: var(--color-accent-soft);
-  box-shadow: 0 0 0 3px rgba(60, 90, 115, 0.15);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(88, 151, 231, 0.18);
 }
 
 /* ---------- Радио и чекбоксы ---------- */
@@ -337,8 +329,8 @@ textarea:focus, input[type="text"]:focus {
   align-items: center;
   gap: 8px;
   padding: 12px 18px;
-  border: 1.5px solid var(--color-border);
-  border-radius: 999px;
+  border: 1.5px solid var(--color-text);
+  border-radius: var(--radius-btn);
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
@@ -348,16 +340,9 @@ textarea:focus, input[type="text"]:focus {
 .option-item input:checked + label {
   border-color: var(--color-accent);
   background: var(--color-accent);
-  color: #FFF8F0;
+  color: var(--color-accent-contrast);
 }
-.option-item input:focus-visible + label { outline: 2px solid var(--color-accent-soft); outline-offset: 2px; }
-
-/* ---------- Ссылки (textarea по одной в строке) ---------- */
-.field__hint code {
-  background: var(--color-accent-bg);
-  padding: 1px 6px;
-  border-radius: 4px;
-}
+.option-item input:focus-visible + label { outline: 2px solid var(--color-accent); outline-offset: 2px; }
 
 /* ---------- Загрузка файлов ---------- */
 .file-drop {
@@ -368,15 +353,15 @@ textarea:focus, input[type="text"]:focus {
   gap: 6px;
   text-align: center;
   padding: 28px 16px;
-  border: 1.5px dashed var(--color-border);
+  border: 1.5px dashed var(--color-text);
   border-radius: var(--radius-m);
   background: var(--color-surface);
   cursor: pointer;
   transition: border-color var(--transition), background var(--transition);
 }
 .file-drop.is-dragover {
-  border-color: var(--color-accent-soft);
-  background: var(--color-accent-bg);
+  border-color: var(--color-accent);
+  background: rgba(88, 151, 231, 0.08);
 }
 .file-drop__title { font-weight: 700; font-size: 15px; }
 .file-drop__hint { font-size: 13px; color: var(--color-text-muted); }
@@ -395,7 +380,7 @@ textarea:focus, input[type="text"]:focus {
   gap: 12px;
   padding: 10px 14px;
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-track);
   border-radius: var(--radius-s);
   font-size: 14px;
 }
@@ -420,12 +405,12 @@ textarea:focus, input[type="text"]:focus {
   gap: 12px;
   padding: 16px;
   background: var(--color-surface);
-  border: 1.5px solid var(--color-border);
+  border: 1.5px solid var(--color-text);
   border-radius: var(--radius-m);
 }
 .consent-row input { margin-top: 4px; width: 18px; height: 18px; accent-color: var(--color-accent); flex-shrink: 0; }
 .consent-row label { font-size: 14px; line-height: 1.5; }
-.consent-row a { color: var(--color-accent-soft); }
+.consent-row a { color: var(--color-accent); }
 
 /* ---------- Навигация вперёд/назад ---------- */
 .form-nav {
@@ -456,7 +441,12 @@ textarea:focus, input[type="text"]:focus {
 }
 .thanks-photo { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
 .thanks-content { max-width: 480px; display: flex; flex-direction: column; align-items: center; gap: 14px; }
-.thanks-title { font-size: clamp(32px, 6vw, 48px); font-weight: 800; letter-spacing: -0.02em; }
+.thanks-title {
+  font-family: var(--font-body);
+  font-size: clamp(32px, 6vw, 48px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
 .thanks-text { font-size: 17px; line-height: 1.55; }
 .thanks-text--muted { color: var(--color-text-muted); font-size: 15px; }
 .thanks-actions {
@@ -480,13 +470,13 @@ textarea:focus, input[type="text"]:focus {
   text-underline-offset: 3px;
   cursor: pointer;
 }
-.btn-link:hover { color: var(--color-accent-soft); }
+.btn-link:hover { color: var(--color-accent); }
 
 /* ---------- Подвал ---------- */
 .site-footer {
   padding: 24px var(--gutter) 40px;
   text-align: center;
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--color-track);
 }
 .site-footer__note {
   font-size: 13px;
@@ -495,7 +485,7 @@ textarea:focus, input[type="text"]:focus {
   margin: 0 auto 8px;
   line-height: 1.5;
 }
-.site-footer__note a { color: var(--color-accent-soft); }
+.site-footer__note a { color: var(--color-accent); }
 
 /* ==========================================================
    МОБИЛЬНАЯ ФИКСИРОВАННАЯ НАВИГАЦИЯ (до 700px)
@@ -508,7 +498,7 @@ textarea:focus, input[type="text"]:focus {
     bottom: 0;
     z-index: 20;
     background: var(--color-bg);
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid var(--color-track);
     padding: 14px var(--gutter);
     padding-bottom: calc(14px + env(safe-area-inset-bottom));
   }
@@ -516,17 +506,10 @@ textarea:focus, input[type="text"]:focus {
 }
 
 /* ==========================================================
-   ПЛАНШЕТ (700–1023px): две колонки на интро и финале
+   ПЛАНШЕТ (от 700px): интро пока остаётся в один столбец,
+   как на мобильном референсе — меняем только «Спасибо»
    ========================================================== */
 @media (min-width: 700px) {
-  .screen--intro {
-    flex-direction: row;
-    align-items: center;
-    padding: 0 48px;
-    gap: 48px;
-  }
-  .intro-visual { flex: 0 0 220px; }
-
   .screen--thanks {
     flex-direction: row;
     text-align: left;
@@ -556,11 +539,42 @@ textarea:focus, input[type="text"]:focus {
     top: 96px;
     flex: 0 0 320px;
   }
-  .form-aside__title { font-size: 30px; }
+  .form-aside__number { font-size: 30px; }
+  .form-aside__title { font-size: 32px; }
   .form-main { flex: 1; max-width: 720px; }
   .form-nav { max-width: 720px; }
 
-  .screen--intro { padding: 0 64px; }
+  /* Интро становится двухколоночным: фото слева, композиция
+     центрируется в правой половине. */
+  .screen--intro {
+    flex-direction: row;
+    align-items: stretch;
+  }
+  .intro-photo {
+    width: 48%;
+    margin: 0; /* на десктопе фото снова на всю высоту панели, без полей */
+    order: 0;
+    flex-shrink: 0;
+  }
+  .intro-content {
+    order: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* группа картинка+текст+кнопка центрируется в правой панели */
+    justify-content: center;
+    padding: 56px 0; /* без горизонтальных полей — ширину 90% считаем от всей панели */
+  }
+  .intro-copy {
+    width: 90%; /* картинка «Заполните БРИФ» занимает 90% белой панели */
+    padding: 0;
+    margin-left: 70px; /* сдвигаем всю композицию дальше от фото (центрирование гасит половину отступа) */
+  }
+  .intro-text {
+    margin-top: -36px; /* текст заезжает на картинку, примерно на высоту слова «БРИФ» */
+  }
+  #start-btn { margin: 0; }
+
   .screen--thanks { padding: 64px; }
 }
 
@@ -571,6 +585,6 @@ textarea:focus, input[type="text"]:focus {
   .form-header { padding: 28px 96px 18px; }
   .form-body { padding: 72px 96px 56px; gap: 96px; }
   .form-aside { flex-basis: 380px; }
-  .screen--intro { padding: 0 96px; }
+  .intro-content { padding: 64px 0; }
   .screen--thanks { padding: 72px 96px; }
 }
