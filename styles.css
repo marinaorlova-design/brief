@@ -19,6 +19,9 @@
   --shadow-card: 0 12px 32px rgba(26, 27, 36, 0.10);
   --transition: 0.35s cubic-bezier(.4, 0, .2, 1);
   --gutter: 20px;
+  --mobile-nav-h: 78px;   /* высота фикс. панели Назад/Далее на мобильном */
+  --mobile-footer-h: 54px; /* высота фикс. плашки с согласием на мобильном */
+  --desktop-footer-h: 112px; /* высота подвала с согласием на десктопе/планшете */
 }
 
 * { box-sizing: border-box; }
@@ -491,18 +494,60 @@ textarea:focus, input[type="text"]:focus {
    МОБИЛЬНАЯ ФИКСИРОВАННАЯ НАВИГАЦИЯ (до 700px)
    ========================================================== */
 @media (max-width: 699.98px) {
-  .screen--form .form-nav {
+  /* Плашка согласия тоже фиксируется снизу — иначе на каждом экране
+     приходится докручивать до неё, а на форме её перекрывают кнопки. */
+  .site-footer {
     position: fixed;
     left: 0;
     right: 0;
     bottom: 0;
+    z-index: 15;
+    margin: 0;
+    background: var(--color-bg);
+    border-top: 1px solid var(--color-track);
+    padding: 8px var(--gutter);
+    padding-bottom: calc(8px + env(safe-area-inset-bottom));
+  }
+  .site-footer__note {
+    font-size: 10.5px;
+    line-height: 1.35;
+    margin-bottom: 0;
+  }
+
+  .screen--form .form-nav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: var(--mobile-footer-h); /* кнопки поднимаются над плашкой согласия, не перекрывают её */
     z-index: 20;
     background: var(--color-bg);
     border-top: 1px solid var(--color-track);
     padding: 14px var(--gutter);
-    padding-bottom: calc(14px + env(safe-area-inset-bottom));
   }
   .form-nav .btn { flex: 1; }
+  .screen--form {
+    padding-bottom: calc(var(--mobile-nav-h) + var(--mobile-footer-h) + env(safe-area-inset-bottom));
+  }
+
+  /* Главный экран занимает ровно высоту устройства — без докрутки.
+     Фото становится гибким (без фикс. aspect-ratio) и дозаполняет
+     весь оставшийся после текста/кнопки вертикальный зазор. */
+  .screen--intro {
+    height: 100svh;
+    overflow: hidden;
+    padding-bottom: calc(var(--mobile-footer-h) + env(safe-area-inset-bottom));
+  }
+  .intro-photo {
+    flex: 1 1 auto;
+    min-height: 0;
+    aspect-ratio: auto;
+    margin-bottom: 0;
+  }
+  .intro-copy { flex-shrink: 0; }
+
+  .screen--thanks {
+    padding-bottom: calc(48px + var(--mobile-footer-h) + env(safe-area-inset-bottom));
+  }
 }
 
 /* ==========================================================
@@ -545,10 +590,15 @@ textarea:focus, input[type="text"]:focus {
   .form-nav { max-width: 720px; }
 
   /* Интро становится двухколоночным: фото слева, композиция
-     центрируется в правой половине. */
+     центрируется в правой половине. Экран занимает ровно высоту
+     вьюпорта за вычетом подвала с согласием — строка про политику
+     должна помещаться в один экран, без докрутки. */
   .screen--intro {
     flex-direction: row;
     align-items: stretch;
+    height: calc(100vh - var(--desktop-footer-h));
+    min-height: 0;
+    overflow: hidden;
   }
   .intro-photo {
     width: 48%;
